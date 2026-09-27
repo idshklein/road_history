@@ -17,7 +17,7 @@ const firstSentinelL2A = '2015-06-27';
 const minimumAnalysisZoom = 15;
 const clusterColors = ['#d34731', '#275f9d', '#d08d29', '#4c9b72', '#8656a5', '#3c4a4f', '#e0718b', '#6d8943', '#8a5b34', '#447f93', '#be644b', '#646a99'];
 
-type Scene = { id: string; properties: Record<string, unknown>; assets: Record<string, { href: string; [key: string]: unknown }> };
+type Scene = { id: string; properties: Record<string, unknown>; assets: Record<string, { href: string;[key: string]: unknown }> };
 type Selection = { pixels: [number, number, number, number]; bounds: L.LatLngBounds };
 type PixelScene = { scene: Scene; date: string; cloud: number; selection: Selection; width: number; height: number; reflectance: Float32Array; vectors: Float32Array; clusterVectors: Float32Array; valid: Uint8Array; labels: Int16Array };
 type PcaComponent = { label: string; variance: number; cumulativeVariance: number; loadings: Array<{ feature: string; value: number }> };
@@ -280,7 +280,7 @@ function selectedFeatureIndices(): number[] { return Array.from(featureOptions.q
 function initializeFeatureOptions(): void {
   featureOptions.replaceChildren(...featureNames.map((name, index) => {
     const label = document.createElement('label'); label.className = 'feature-option';
-    const input = document.createElement('input'); input.type = 'checkbox'; input.value = String(index); input.checked = true;
+    const input = document.createElement('input'); input.type = 'checkbox'; input.value = String(index); input.checked = index < sourceBandNames.length;
     label.append(input, document.createTextNode(name)); return label;
   }));
 }

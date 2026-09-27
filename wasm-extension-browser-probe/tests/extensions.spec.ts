@@ -20,9 +20,10 @@ test('analyzes Sentinel-2 COGs for the visible map area', async ({ page }) => {
   await page.locator('#interval-days').selectOption('365');
   await page.locator('.control-accordion').filter({ hasText: 'קלאסטרינג' }).locator('summary').click();
   await expect(page.locator('#feature-options input')).toHaveCount(23);
-  await expect(page.locator('#feature-options input:checked')).toHaveCount(23);
-  await page.locator('#feature-options input[value="0"]').uncheck();
-  await expect(page.locator('#feature-options input:checked')).toHaveCount(22);
+  await expect(page.locator('#feature-options input:checked')).toHaveCount(7);
+  await expect(page.locator('#feature-options input[value="0"]')).toBeChecked();
+  await expect(page.locator('#feature-options input[value="6"]')).toBeChecked();
+  await expect(page.locator('#feature-options input[value="7"]')).not.toBeChecked();
   await page.locator('#clustering-input').selectOption('pca');
   await expect(page.locator('#pca-components-label')).toBeVisible();
   await page.locator('#pca-components').selectOption('3');
