@@ -1,0 +1,24 @@
+{
+  "name": "duckdb-wasm-extension-probe",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "build": "tsc --noEmit && vite build",
+    "dev": "vite",
+    "dev:local": "vite --host 127.0.0.1 --port 5173",
+    "test:browser": "playwright test"
+  },
+  "dependencies": {
+    "@duckdb/duckdb-wasm": "1.33.1-dev57.0",
+    "geotiff": "^3.0.5",
+    "leaflet": "^1.9.4",
+    "proj4": "^2.19.10"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0",
+    "@types/leaflet": "^1.9.21",
+    "typescript": "^5.9.3",
+    "vite": "^7.1.12"
+  }
+}

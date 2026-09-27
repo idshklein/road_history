@@ -1,0 +1,52 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "COG Probe: Install Dependencies",
+      "type": "shell",
+      "command": "npm",
+      "args": ["install"],
+      "options": {
+        "cwd": "${workspaceFolder}/wasm-extension-browser-probe"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "COG Probe: Build",
+      "type": "shell",
+      "command": "npm",
+      "args": ["run", "build"],
+      "options": {
+        "cwd": "${workspaceFolder}/wasm-extension-browser-probe"
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "COG Probe: Browser Test",
+      "type": "shell",
+      "command": "npm",
+      "args": ["run", "test:browser"],
+      "options": {
+        "cwd": "${workspaceFolder}/wasm-extension-browser-probe"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "COG Probe: Run Dev Server",
+      "type": "shell",
+      "command": "npm",
+      "args": ["run", "dev:local"],
+      "options": {
+        "cwd": "${workspaceFolder}/wasm-extension-browser-probe"
+      },
+      "dependsOn": "COG Probe: Build",
+      "dependsOrder": "sequence",
+      "isBackground": true,
+      "problemMatcher": []
+    }
+  ]
+}

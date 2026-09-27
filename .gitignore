@@ -1,0 +1,17 @@
+# Credentials and local configuration
+s3_keys.txt
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Node and browser-test artifacts
+wasm-extension-browser-probe/node_modules/
+wasm-extension-browser-probe/dist/
+wasm-extension-browser-probe/test-results/
+wasm-extension-browser-probe/playwright-report/
+
+# Generated analytical outputs
+*.parquet
+*.duckdb

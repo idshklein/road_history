@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Road Signal Lab</title>
+  </head>
+  <body>
+    <div id="app">
+      <header class="topbar">
+        <div><p class="eyebrow">Sentinel-2 / client-only</p><h1>Road Signal Lab</h1></div>
+        <div class="session-indicator"><span></span>Earth Search public access</div>
+      </header>
+      <main class="workspace">
+        <aside class="control-rail" aria-label="ניתוח">
+          <section class="control-section">
+            <div class="section-heading"><p class="eyebrow">אזור</p><h2>מסגרת הניתוח</h2></div>
+            <form id="location-form" class="location-form"><input id="location-query" type="search" placeholder="חיפוש מקום או כביש" autocomplete="off" /><button type="submit">מרכז מפה</button></form>
+            <p id="bounds-readout" class="bounds-readout"></p>
+          </section>
+          <section class="control-section">
+            <div class="section-heading"><p class="eyebrow">זמן ואיכות</p><h2>סינון scenes</h2></div>
+            <div class="date-grid">
+              <label><span>מתאריך</span><input id="start-date" type="date" min="2015-06-27" value="2023-09-26" required /></label>
+              <label><span>עד תאריך</span><input id="end-date" type="date" value="2026-09-26" required /></label>
+            </div>
+            <label class="range-label"><span>עננות מרבית <strong id="cloud-value">30%</strong></span><input id="cloud-cover" type="range" min="0" max="100" value="30" step="5" /></label>
+            <label><span>דגימת זמן</span><select id="interval-days"><option value="90">כל 3 חודשים</option><option value="180" selected>כל חצי שנה</option><option value="365">פעם בשנה</option></select></label>
+            <label><span>מספר clusters</span><select id="cluster-count"><option value="4">4</option><option value="6" selected>6</option><option value="8">8</option><option value="10">10</option><option value="12">12</option></select></label>
+            <fieldset class="feature-selector"><legend>Features לקלאסטרינג</legend><div id="feature-options"></div></fieldset>
+          </section>
+          <button id="analyze-button" class="primary-button analyze-button" type="button">ניתוח האזור הנראה</button>
+          <p id="analysis-status" class="analysis-status" role="status">מוכן לניתוח.</p>
+          <button id="copy-diagnostic" class="copy-diagnostic" type="button" hidden>העתק אבחון שגיאה</button>
+        </aside>
+        <section class="map-region" aria-label="מפת אזור הניתוח"><div id="map"></div><div id="cluster-legend" class="cluster-legend" hidden></div><div class="map-caption">בצע/י zoom in לרמה 15, נתח/י, ולחץ/י על המפה לשמירת נקודת בדיקה והווקטור שלה</div></section>
+        <aside class="results-panel" aria-label="תוצאות ניתוח">
+          <div class="results-header"><div><p class="eyebrow">Pixel vectors</p><h2>Clusters ספקטרליים</h2></div><button id="export-button" type="button" disabled>Parquet</button></div>
+          <label class="scene-picker"><span>הצגת תאריך במפה</span><select id="scene-selector" disabled></select></label>
+          <button id="clear-markers" type="button">נקה נקודות בדיקה</button>
+          <section class="radar-panel" aria-label="וקטורי clusters ונקודות בדיקה"><div class="radar-heading"><p class="eyebrow">Radar</p><h3>מרכזי clusters ונקודות</h3></div><div id="radar-chart" class="radar-chart" hidden></div></section>
+          <div id="result-summary" class="result-summary">טרם נותחו scenes.</div>
+          <div class="results-table-wrap"><table><thead><tr><th>תאריך</th><th>עננות</th><th>pixels</th><th>התפלגות clusters</th></tr></thead><tbody id="results-body"></tbody></table></div>
+        </aside>
+      </main>
+    </div>
+    <script type="module" src="/src/clusters.ts"></script>
+  </body>
+</html>
