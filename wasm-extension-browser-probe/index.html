@@ -36,6 +36,8 @@
         <section class="map-region" aria-label="מפת אזור הניתוח"><div id="map"></div><div id="cluster-legend" class="cluster-legend" hidden></div><div class="map-caption">בצע/י zoom in לרמה 15, נתח/י, ולחץ/י על המפה לשמירת נקודת בדיקה והווקטור שלה</div></section>
         <aside class="results-panel" aria-label="תוצאות ניתוח">
           <div class="results-header"><div><p class="eyebrow">Pixel vectors</p><h2>Clusters ספקטרליים</h2></div><button id="export-button" type="button" disabled>Parquet</button></div>
+          <button id="probe-duckdb-raster" class="duckdb-probe" type="button">בדיקת קריאת COG ב־DuckDB-WASM</button>
+          <p id="duckdb-raster-result" class="duckdb-raster-result" hidden></p>
           <label class="scene-picker"><span>הצגת תאריך במפה</span><select id="scene-selector" disabled></select></label>
           <button id="clear-markers" type="button">נקה נקודות בדיקה</button>
           <section class="radar-panel" aria-label="וקטורי clusters ונקודות בדיקה"><div class="radar-heading"><p class="eyebrow">Radar</p><h3>מרכזי clusters ונקודות</h3></div><div id="radar-chart" class="radar-chart" hidden></div></section>

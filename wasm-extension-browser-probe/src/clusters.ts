@@ -34,6 +34,8 @@ const clusterCount = $('#cluster-count') as HTMLSelectElement;
 const featureOptions = $('#feature-options') as HTMLElement;
 const analyzeButton = $('#analyze-button') as HTMLButtonElement;
 const exportButton = $('#export-button') as HTMLButtonElement;
+const probeDuckDbRasterButton = $('#probe-duckdb-raster') as HTMLButtonElement;
+const duckDbRasterResult = $('#duckdb-raster-result') as HTMLElement;
 const clearMarkersButton = $('#clear-markers') as HTMLButtonElement;
 const sceneSelector = $('#scene-selector') as HTMLSelectElement;
 const boundsReadout = $('#bounds-readout') as HTMLElement;
@@ -55,6 +57,7 @@ let diagnosticLines: string[] = [];
 cloudCover.addEventListener('input', () => { cloudValue.textContent = `${cloudCover.value}%`; });
 analyzeButton.addEventListener('click', () => void analyzeVectors());
 exportButton.addEventListener('click', () => void exportParquet());
+probeDuckDbRasterButton.addEventListener('click', () => void probeDuckDbRaster());
 copyDiagnosticButton.addEventListener('click', () => void copyDiagnostic());
 clearMarkersButton.addEventListener('click', () => { markerLayer.clearLayers(); inspectedVectors = []; renderRadar(); });
 sceneSelector.addEventListener('change', () => renderScene(Number(sceneSelector.value)));
@@ -306,6 +309,24 @@ async function exportParquet(): Promise<void> {
     const db = await getDatabase(); const connection = await db.connect(); await db.registerFileText('pixel-vectors.json', JSON.stringify(rows)); await connection.query("COPY (SELECT * FROM read_json_auto('pixel-vectors.json')) TO 'pixel-vectors-clusters.parquet' (FORMAT PARQUET)");
     const buffer = await db.copyFileToBuffer('pixel-vectors-clusters.parquet'); const link = document.createElement('a'); link.href = URL.createObjectURL(new Blob([Uint8Array.from(buffer)])); link.download = 'pixel-vectors-clusters.parquet'; link.click(); URL.revokeObjectURL(link.href); await connection.close(); setStatus('וקטורי bands, מדדים ושינויי זמן וה־clusters הורדו כ־Parquet.');
   } catch (error) { setStatus(message(error)); }
+}
+
+async function probeDuckDbRaster(): Promise<void> {
+  probeDuckDbRasterButton.disabled = true; duckDbRasterResult.hidden = false;
+  duckDbRasterResult.textContent = 'בודק התקנה וטעינה של raster extension ב־DuckDB-WASM...';
+  try {
+    const db = await getDatabase(); const connection = await db.connect();
+    await connection.query('SELECT version()');
+    try {
+      await connection.query('INSTALL raster');
+      await connection.query('LOAD raster');
+      duckDbRasterResult.textContent = 'DuckDB-WASM: raster נטען. נדרש ניסוי המשך לקריאת COG בפועל.';
+    } catch (error) {
+      duckDbRasterResult.textContent = `DuckDB-WASM: raster אינו זמין ב־WASM (${message(error)}). לכן DuckDB-WASM אינו יכול לפענח COG/TIFF במסלול זה, ו־geotiff.js נשאר מנוע הקריאה.`;
+    }
+    await connection.close();
+  } catch (error) { duckDbRasterResult.textContent = `ניסוי DuckDB-WASM נכשל: ${message(error)}`; }
+  finally { probeDuckDbRasterButton.disabled = false; }
 }
 
 async function getDatabase(): Promise<duckdb.AsyncDuckDB> { if (database) return database; const worker = new Worker(duckdbWorker); database = new duckdb.AsyncDuckDB(new duckdb.VoidLogger(), worker); await database.instantiate(duckdbWasm); return database; }

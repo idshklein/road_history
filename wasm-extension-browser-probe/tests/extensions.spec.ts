@@ -9,6 +9,8 @@ test('opens the public road-signal workspace without credentials', async ({ page
   await expect(page.locator('#analyze-button')).toBeDisabled();
   await expect(page.locator('#analysis-status')).toContainText('zoom in');
   await expect(page.locator('#bounds-readout')).not.toBeEmpty();
+  await page.locator('#probe-duckdb-raster').click();
+  await expect(page.locator('#duckdb-raster-result')).toContainText('raster אינו זמין', { timeout: 60_000 });
 });
 
 test('analyzes Sentinel-2 COGs for the visible map area', async ({ page }) => {
